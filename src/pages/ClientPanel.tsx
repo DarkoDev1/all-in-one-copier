@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { LogOut, FileText, Download, FolderOpen } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 import logoStg from "@/assets/logo-stg.png";
 
 interface ClientFile {
@@ -17,21 +18,28 @@ interface ClientFile {
 const ClientPanel = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user, isClient, clientName, isLoading: authLoading, signOut } = useAuth();
   const [files, setFiles] = useState<ClientFile[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const userName = localStorage.getItem("userName");
 
+  // Auth check
   useEffect(() => {
-    const role = localStorage.getItem("userRole");
-    if (role !== "client") {
+    if (!authLoading && (!user || !isClient)) {
       navigate("/login");
-      return;
     }
-    fetchFiles();
-  }, [navigate]);
+  }, [user, isClient, authLoading, navigate]);
+
+  // Fetch files on mount
+  useEffect(() => {
+    if (user && isClient && clientName) {
+      fetchFiles();
+    }
+  }, [user, isClient, clientName]);
 
   // Realtime subscription
   useEffect(() => {
+    if (!clientName) return;
+
     const channel = supabase
       .channel("my-files-changes")
       .on(
@@ -44,7 +52,7 @@ const ClientPanel = () => {
         (payload) => {
           if (
             payload.new &&
-            (payload.new as ClientFile).client_name === userName
+            (payload.new as ClientFile).client_name === clientName
           ) {
             fetchFiles();
           }
@@ -55,17 +63,17 @@ const ClientPanel = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [userName]);
+  }, [clientName]);
 
   const fetchFiles = async () => {
-    if (!userName) return;
+    if (!clientName) return;
     
     setIsLoading(true);
     try {
       const { data, error } = await supabase
         .from("client_files")
         .select("*")
-        .eq("client_name", userName)
+        .eq("client_name", clientName)
         .order("uploaded_at", { ascending: false });
 
       if (error) throw error;
@@ -113,9 +121,8 @@ const ClientPanel = () => {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("userRole");
-    localStorage.removeItem("userName");
+  const handleLogout = async () => {
+    await signOut();
     navigate("/");
   };
 
@@ -124,6 +131,14 @@ const ClientPanel = () => {
     if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
     return (bytes / (1024 * 1024)).toFixed(1) + " MB";
   };
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -140,7 +155,7 @@ const ClientPanel = () => {
               <span className="text-sm font-semibold text-foreground">
                 Portal de Cliente
               </span>
-              <p className="text-[10px] text-neutral-500">{userName}</p>
+              <p className="text-[10px] text-neutral-500">{clientName}</p>
             </div>
           </div>
           <button

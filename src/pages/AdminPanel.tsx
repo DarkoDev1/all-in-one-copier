@@ -7,16 +7,15 @@ import {
   FileText,
   Trash2,
   RefreshCw,
-  Download,
   Search,
 } from "lucide-react";
 import logoStg from "@/assets/logo-stg.png";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 
 interface Client {
   name: string;
-  password: string;
 }
 
 interface ClientFile {
@@ -31,6 +30,7 @@ interface ClientFile {
 const AdminPanel = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user, isAdmin, isLoading: authLoading, signOut } = useAuth();
   const [clients, setClients] = useState<Client[]>([]);
   const [selectedClient, setSelectedClient] = useState<string | null>(null);
   const [clientFiles, setClientFiles] = useState<ClientFile[]>([]);
@@ -39,14 +39,19 @@ const AdminPanel = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
+  // Auth check
   useEffect(() => {
-    const role = localStorage.getItem("userRole");
-    if (role !== "admin") {
+    if (!authLoading && (!user || !isAdmin)) {
       navigate("/login");
-      return;
     }
-    fetchClients();
-  }, [navigate]);
+  }, [user, isAdmin, authLoading, navigate]);
+
+  // Fetch clients on mount
+  useEffect(() => {
+    if (user && isAdmin) {
+      fetchClients();
+    }
+  }, [user, isAdmin]);
 
   useEffect(() => {
     if (selectedClient) {
@@ -81,7 +86,9 @@ const AdminPanel = () => {
   const fetchClients = async () => {
     setIsLoadingClients(true);
     try {
-      const { data, error } = await supabase.functions.invoke("google-sheets");
+      // Call the secured get-clients function
+      const { data, error } = await supabase.functions.invoke("get-clients");
+      
       if (error) throw error;
       setClients(data?.clients || []);
     } catch (error) {
@@ -120,7 +127,7 @@ const AdminPanel = () => {
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!selectedClient || !e.target.files?.length) return;
+    if (!selectedClient || !e.target.files?.length || !user) return;
 
     const file = e.target.files[0];
     setIsUploading(true);
@@ -141,7 +148,8 @@ const AdminPanel = () => {
         file_name: file.name,
         file_path: filePath,
         file_size: file.size,
-        uploaded_by: localStorage.getItem("userName") || "admin",
+        uploaded_by: user.email || "admin",
+        user_id: user.id,
       });
 
       if (dbError) throw dbError;
@@ -198,9 +206,8 @@ const AdminPanel = () => {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("userRole");
-    localStorage.removeItem("userName");
+  const handleLogout = async () => {
+    await signOut();
     navigate("/");
   };
 
@@ -213,6 +220,14 @@ const AdminPanel = () => {
     if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
     return (bytes / (1024 * 1024)).toFixed(1) + " MB";
   };
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -230,7 +245,7 @@ const AdminPanel = () => {
                 Panel de Administrador
               </span>
               <p className="text-[10px] text-neutral-500">
-                {localStorage.getItem("userName")}
+                {user?.email}
               </p>
             </div>
           </div>

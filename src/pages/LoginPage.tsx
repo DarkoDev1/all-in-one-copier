@@ -1,78 +1,127 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff, LogIn, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 import logoStg from "@/assets/logo-stg.png";
+import { z } from "zod";
 
-// Admin credentials
-const ADMIN_USER = "Felix Manuel Toro Gil";
-const ADMIN_PASSWORD = "Mango78.";
+// Validation schema
+const loginSchema = z.object({
+  clientName: z.string().min(1, "Nombre de usuario requerido"),
+  password: z.string().min(1, "Contraseña requerida"),
+});
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [username, setUsername] = useState("");
+  const { user, userRole, isLoading: authLoading } = useAuth();
+  const [clientName, setClientName] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isAdminLogin, setIsAdminLogin] = useState(false);
+  const [email, setEmail] = useState("");
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (!authLoading && user && userRole) {
+      if (userRole.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/cliente');
+      }
+    }
+  }, [user, userRole, authLoading, navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      // Check if admin
-      if (username === ADMIN_USER && password === ADMIN_PASSWORD) {
-        localStorage.setItem("userRole", "admin");
-        localStorage.setItem("userName", username);
-        toast({
-          title: "Bienvenido",
-          description: "Acceso de administrador concedido.",
-        });
-        navigate("/admin");
-        return;
+      // Validate input
+      if (isAdminLogin) {
+        if (!email || !password) {
+          toast({
+            title: "Error",
+            description: "Email y contraseña son requeridos",
+            variant: "destructive",
+          });
+          return;
+        }
+      } else {
+        const validation = loginSchema.safeParse({ clientName, password });
+        if (!validation.success) {
+          toast({
+            title: "Error",
+            description: validation.error.errors[0].message,
+            variant: "destructive",
+          });
+          return;
+        }
       }
 
-      // Check against Google Sheets for clients
-      const { data, error } = await supabase.functions.invoke("google-sheets");
+      // Call authentication edge function
+      const { data, error } = await supabase.functions.invoke("authenticate", {
+        body: isAdminLogin 
+          ? { email, password }
+          : { email: `${clientName.toLowerCase().replace(/[^a-z0-9]/g, '_')}@client.torogil.local`, password, clientName },
+      });
 
       if (error) {
-        throw new Error("Error al conectar con el servidor");
+        throw new Error(error.message || "Error de autenticación");
       }
 
-      const clients = data?.clients || [];
-      const client = clients.find(
-        (c: { name: string; password: string }) =>
-          c.name === username && c.password === password
-      );
+      if (data?.error) {
+        throw new Error(data.error);
+      }
 
-      if (client) {
-        localStorage.setItem("userRole", "client");
-        localStorage.setItem("userName", username);
+      if (data?.session) {
+        // Set the session in the Supabase client
+        await supabase.auth.setSession({
+          access_token: data.session.access_token,
+          refresh_token: data.session.refresh_token,
+        });
+
         toast({
           title: "Bienvenido",
-          description: `Hola, ${username}`,
+          description: data.role === 'admin' 
+            ? "Acceso de administrador concedido."
+            : `Hola, ${data.clientName || clientName}`,
         });
-        navigate("/cliente");
+
+        // Navigate based on role
+        if (data.role === 'admin') {
+          navigate("/admin");
+        } else {
+          navigate("/cliente");
+        }
       } else {
-        toast({
-          title: "Error",
-          description: "Credenciales incorrectas",
-          variant: "destructive",
-        });
+        throw new Error("No se recibió sesión válida");
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Login error:", error);
+      const errorMessage = error instanceof Error ? error.message : "No se pudo iniciar sesión";
       toast({
         title: "Error",
-        description: "No se pudo iniciar sesión. Intente más tarde.",
+        description: errorMessage === "Invalid credentials" 
+          ? "Credenciales incorrectas" 
+          : errorMessage,
         variant: "destructive",
       });
     } finally {
       setIsLoading(false);
     }
   };
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-6">
@@ -103,24 +152,66 @@ const LoginPage = () => {
               Iniciar Sesión
             </h1>
             <p className="text-sm text-neutral-400 mt-2">
-              Ingrese sus credenciales para continuar
+              {isAdminLogin ? "Acceso de administrador" : "Ingrese sus credenciales para continuar"}
             </p>
           </div>
 
+          {/* Toggle between admin and client login */}
+          <div className="flex gap-2 mb-6">
+            <button
+              type="button"
+              onClick={() => setIsAdminLogin(false)}
+              className={`flex-1 py-2 text-sm font-medium rounded transition-colors ${
+                !isAdminLogin 
+                  ? "bg-primary text-foreground" 
+                  : "bg-white/5 text-neutral-400 hover:text-foreground"
+              }`}
+            >
+              Cliente
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsAdminLogin(true)}
+              className={`flex-1 py-2 text-sm font-medium rounded transition-colors ${
+                isAdminLogin 
+                  ? "bg-primary text-foreground" 
+                  : "bg-white/5 text-neutral-400 hover:text-foreground"
+              }`}
+            >
+              Administrador
+            </button>
+          </div>
+
           <form onSubmit={handleLogin} className="space-y-5">
-            <div className="space-y-1.5">
-              <label className="text-xs font-medium text-neutral-400">
-                Nombre de Usuario
-              </label>
-              <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="w-full bg-black/50 border border-white/10 rounded px-4 py-3 text-sm text-foreground focus:border-primary focus:outline-none transition-colors"
-                placeholder="Ingrese su nombre completo"
-                required
-              />
-            </div>
+            {isAdminLogin ? (
+              <div className="space-y-1.5">
+                <label className="text-xs font-medium text-neutral-400">
+                  Email de Administrador
+                </label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full bg-black/50 border border-white/10 rounded px-4 py-3 text-sm text-foreground focus:border-primary focus:outline-none transition-colors"
+                  placeholder="admin@torogil.com"
+                  required
+                />
+              </div>
+            ) : (
+              <div className="space-y-1.5">
+                <label className="text-xs font-medium text-neutral-400">
+                  Nombre de Usuario
+                </label>
+                <input
+                  type="text"
+                  value={clientName}
+                  onChange={(e) => setClientName(e.target.value)}
+                  className="w-full bg-black/50 border border-white/10 rounded px-4 py-3 text-sm text-foreground focus:border-primary focus:outline-none transition-colors"
+                  placeholder="Ingrese su nombre completo"
+                  required
+                />
+              </div>
+            )}
 
             <div className="space-y-1.5">
               <label className="text-xs font-medium text-neutral-400">
