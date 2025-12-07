@@ -32,15 +32,15 @@ const Navigation = ({ onNavigate }: NavigationProps) => {
           >
             <img 
               src={logoStg} 
-              alt="Toro Gil Servicios" 
+              alt="Servicios Toro, Gil & Asociados" 
               className="h-10 w-auto object-contain"
             />
             <div className="flex flex-col">
               <span className="text-sm font-semibold tracking-tight text-foreground leading-none">
-                TORO GIL
+                TORO, GIL & ASOCIADOS
               </span>
               <span className="text-[10px] text-neutral-500 font-medium tracking-wider uppercase mt-0.5">
-                Servicios C.A.
+                C.A.
               </span>
             </div>
           </button>

@@ -1,38 +1,53 @@
+import vybLogo from "@/assets/testimonials/vyb.png";
+import marinLogo from "@/assets/testimonials/marin.png";
+import tsolutionsLogo from "@/assets/testimonials/tsolutions.png";
+import calomiLogo from "@/assets/testimonials/calomi.png";
+import brasasGusLogo from "@/assets/testimonials/brasas-gus.png";
+import picaderoWesternLogo from "@/assets/testimonials/picadero-western.png";
+import andaraLogo from "@/assets/testimonials/andara.jpg";
+
 const testimonials = [
   {
     name: "Bernardo Taravay",
     company: "V&B 179 Seguridad Integral, C.A.",
     text: "Cuando estuve apunto de cerrar mis servicios, hicieron un cambio increíble para mejorar mi estado financiero.",
+    logo: vybLogo,
   },
   {
     name: "William Marín",
     company: "Servicios Automotriz Marín, F.P.",
     text: "Servicio rápido y oportuno.",
+    logo: marinLogo,
   },
   {
     name: "Alexander Cordero",
     company: "Tsolutions, C.A.",
-    text: "Son los contadores que me han brindado los resultados mas transparente de mi empresa.",
+    text: "Son los contadores que me han brindado los resultados más transparentes de mi empresa.",
+    logo: tsolutionsLogo,
   },
   {
     name: "Michelle Campo",
     company: "Inversiones Mundo Calomistore, C.A.",
     text: "Recomendados completamente, expertos en su rama y servicios.",
+    logo: calomiLogo,
   },
   {
     name: "Gustavo González",
     company: "Inversiones González G 751, F.P.",
     text: "Realizaron mi constitución de empresa, llevan mi contabilidad y la verdad excelente servicio.",
+    logo: brasasGusLogo,
   },
   {
     name: "Winston Toro",
     company: "Inversiones Picadero Western, C.A.",
     text: "Voluptas sit aspernatur aut odit aut fugit sed quia consequuntur magni.",
+    logo: picaderoWesternLogo,
   },
   {
     name: "Jorge Andara",
     company: "Servicios Técnicos Andara RDA, C.A.",
     text: "Un servicio impecable y muy oportuno, jamás había tenido mis estados financieros mes a mes.",
+    logo: andaraLogo,
   },
 ];
 
@@ -61,13 +76,20 @@ const TestimonialsSection = () => {
                   "{testimonial.text}"
                 </p>
               </div>
-              <div className="pt-4 border-t border-white/5">
-                <h4 className="text-foreground text-sm font-medium">
-                  {testimonial.name}
-                </h4>
-                <p className="text-xs text-neutral-500 mt-1">
-                  {testimonial.company}
-                </p>
+              <div className="flex items-center gap-4 pt-4 border-t border-white/5">
+                <img
+                  src={testimonial.logo}
+                  alt={testimonial.company}
+                  className="w-12 h-12 object-contain grayscale hover:grayscale-0 transition-all duration-300"
+                />
+                <div>
+                  <h4 className="text-foreground text-sm font-medium">
+                    {testimonial.name}
+                  </h4>
+                  <p className="text-xs text-neutral-500 mt-1">
+                    {testimonial.company}
+                  </p>
+                </div>
               </div>
             </div>
           ))}

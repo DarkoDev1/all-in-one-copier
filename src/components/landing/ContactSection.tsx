@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Phone, Mail, MapPin, ChevronDown, Instagram, Twitter } from "lucide-react";
+import { Phone, Mail, MapPin, ChevronDown, Instagram, FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const ContactSection = () => {
@@ -50,7 +50,7 @@ const ContactSection = () => {
                     Teléfono / WhatsApp
                   </p>
                   <p className="text-foreground text-sm">(+58) 424.195.09.32</p>
-                  <p className="text-foreground text-sm">(+58) 414.466.27.33</p>
+                  <p className="text-foreground text-sm">(+58) 412.970.35.16</p>
                 </div>
               </div>
 
@@ -64,7 +64,6 @@ const ContactSection = () => {
                   </p>
                   <p className="text-foreground text-sm">torogilservicios@gmail.com</p>
                   <p className="text-foreground text-sm">felixmtoroo@gmail.com</p>
-                  <p className="text-foreground text-sm">gonzalezg751@gmail.com</p>
                 </div>
               </div>
 
@@ -94,11 +93,9 @@ const ContactSection = () => {
               </div>
 
               <div className="flex items-center gap-4 p-4 bg-neutral-900/50 border border-white/5 rounded-lg">
-                <img 
-                  src="/logo-stg.png" 
-                  alt="Logo STG"
-                  className="w-12 h-12 object-contain"
-                />
+                <div className="w-10 h-10 bg-primary/10 text-primary rounded flex items-center justify-center">
+                  <FileText className="w-5 h-5" />
+                </div>
                 <div>
                   <p className="text-xs text-neutral-500 uppercase font-semibold mb-1">
                     RIF
