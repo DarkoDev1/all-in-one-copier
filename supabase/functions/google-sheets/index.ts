@@ -20,7 +20,7 @@ serve(async (req) => {
 
     // Sheet ID from the URL provided
     const sheetId = '1fu1vPM-vq6-Ff3tBIq_bcZrrW4fTX2T15BLi5d2bGwY';
-    const range = 'A:B'; // Assuming columns A and B have name and password
+    const range = 'A:B'; // Columns A and B have name and password
     
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
     
@@ -35,16 +35,23 @@ serve(async (req) => {
     }
     
     const data = await response.json();
-    console.log('Sheet data fetched successfully, rows:', data.values?.length || 0);
-    
-    // Parse the data - skip header row if exists
     const rows = data.values || [];
-    const clients = rows.slice(1).map((row: string[]) => ({
-      name: row[0] || '',
-      password: row[1] || '',
-    })).filter((client: { name: string; password: string }) => client.name && client.password);
+    console.log('Sheet data fetched successfully, rows:', rows.length);
+    console.log('Raw rows data:', JSON.stringify(rows));
+    
+    // Parse ALL rows - no skipping header since sheet may not have one
+    // Filter out rows that don't have both name and password
+    const clients = rows
+      .map((row: string[]) => ({
+        name: (row[0] || '').trim(),
+        password: (row[1] || '').trim(),
+      }))
+      .filter((client: { name: string; password: string }) => 
+        client.name.length > 0 && client.password.length > 0
+      );
     
     console.log('Parsed clients count:', clients.length);
+    console.log('Clients:', JSON.stringify(clients.map((c: { name: string }) => c.name)));
     
     return new Response(
       JSON.stringify({ clients }),

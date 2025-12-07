@@ -49,9 +49,8 @@ const ContactSection = () => {
                   <p className="text-xs text-neutral-500 uppercase font-semibold">
                     Teléfono / WhatsApp
                   </p>
-                  <p className="text-foreground text-sm">
-                    (+58) 424.195.09.32 / 414.466.27.33
-                  </p>
+                  <p className="text-foreground text-sm">(+58) 424.195.09.32</p>
+                  <p className="text-foreground text-sm">(+58) 414.466.27.33</p>
                 </div>
               </div>
 
@@ -94,11 +93,18 @@ const ContactSection = () => {
                 </div>
               </div>
 
-              <div className="p-4 bg-neutral-900/50 border border-white/5 rounded-lg">
-                <p className="text-xs text-neutral-500 uppercase font-semibold mb-1">
-                  RIF
-                </p>
-                <p className="text-foreground text-sm font-mono">J-50226323-3</p>
+              <div className="flex items-center gap-4 p-4 bg-neutral-900/50 border border-white/5 rounded-lg">
+                <img 
+                  src="/logo-stg.png" 
+                  alt="Logo STG"
+                  className="w-12 h-12 object-contain"
+                />
+                <div>
+                  <p className="text-xs text-neutral-500 uppercase font-semibold mb-1">
+                    RIF
+                  </p>
+                  <p className="text-foreground text-sm font-mono">J-50226323-3</p>
+                </div>
               </div>
             </div>
           </div>
@@ -162,11 +168,10 @@ const ContactSection = () => {
                     className="w-full bg-black/50 border border-white/10 rounded px-3 py-2.5 text-sm text-foreground focus:border-primary focus:outline-none transition-colors appearance-none"
                   >
                     <option value="">Seleccione una opción</option>
-                    <option value="seniat">SENIAT / Fiscal</option>
-                    <option value="saime">SAIME / Identificación</option>
-                    <option value="saren">SAREN / Registros</option>
-                    <option value="apostilla">Apostilla / Legalización</option>
-                    <option value="otro">Otro</option>
+                    <option value="contables">Servicios Contables</option>
+                    <option value="administrativos">Servicios Administrativos</option>
+                    <option value="constituciones">Constitución de Empresas</option>
+                    <option value="otros">Otros Servicios</option>
                   </select>
                   <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 pointer-events-none w-3.5 h-3.5" />
                 </div>

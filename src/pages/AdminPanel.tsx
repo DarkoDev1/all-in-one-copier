@@ -10,6 +10,7 @@ import {
   Download,
   Search,
 } from "lucide-react";
+import logoStg from "@/assets/logo-stg.png";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -219,9 +220,11 @@ const AdminPanel = () => {
       <header className="border-b border-white/10 bg-black/80 backdrop-blur-xl sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 flex items-center justify-center bg-gradient-to-br from-primary to-red-800 rounded-lg">
-              <span className="font-bold text-foreground text-lg">T</span>
-            </div>
+            <img 
+              src={logoStg} 
+              alt="Toro Gil Servicios" 
+              className="h-10 w-auto object-contain"
+            />
             <div>
               <span className="text-sm font-semibold text-foreground">
                 Panel de Administrador
