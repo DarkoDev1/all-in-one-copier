@@ -21,8 +21,6 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isAdminLogin, setIsAdminLogin] = useState(false);
-  const [email, setEmail] = useState("");
 
   // Redirect if already authenticated
   useEffect(() => {
@@ -41,32 +39,23 @@ const LoginPage = () => {
 
     try {
       // Validate input
-      if (isAdminLogin) {
-        if (!email || !password) {
-          toast({
-            title: "Error",
-            description: "Email y contraseña son requeridos",
-            variant: "destructive",
-          });
-          return;
-        }
-      } else {
-        const validation = loginSchema.safeParse({ clientName, password });
-        if (!validation.success) {
-          toast({
-            title: "Error",
-            description: validation.error.errors[0].message,
-            variant: "destructive",
-          });
-          return;
-        }
+      const validation = loginSchema.safeParse({ clientName, password });
+      if (!validation.success) {
+        toast({
+          title: "Error",
+          description: validation.error.errors[0].message,
+          variant: "destructive",
+        });
+        return;
       }
 
-      // Call authentication edge function
+      // Call authentication edge function - unified login for both admin and clients
       const { data, error } = await supabase.functions.invoke("authenticate", {
-        body: isAdminLogin 
-          ? { email, password }
-          : { email: `${clientName.toLowerCase().replace(/[^a-z0-9]/g, '_')}@client.torogil.local`, password, clientName },
+        body: { 
+          email: `${clientName.toLowerCase().replace(/[^a-z0-9]/g, '_')}@client.torogil.local`, 
+          password, 
+          clientName 
+        },
       });
 
       if (error) {
@@ -156,62 +145,20 @@ const LoginPage = () => {
             </p>
           </div>
 
-          {/* Toggle between admin and client login */}
-          <div className="flex gap-2 mb-6">
-            <button
-              type="button"
-              onClick={() => setIsAdminLogin(false)}
-              className={`flex-1 py-2 text-sm font-medium rounded transition-colors ${
-                !isAdminLogin 
-                  ? "bg-primary text-foreground" 
-                  : "bg-white/5 text-neutral-400 hover:text-foreground"
-              }`}
-            >
-              Cliente
-            </button>
-            <button
-              type="button"
-              onClick={() => setIsAdminLogin(true)}
-              className={`flex-1 py-2 text-sm font-medium rounded transition-colors ${
-                isAdminLogin 
-                  ? "bg-primary text-foreground" 
-                  : "bg-white/5 text-neutral-400 hover:text-foreground"
-              }`}
-            >
-              Administrador
-            </button>
-          </div>
-
           <form onSubmit={handleLogin} className="space-y-5">
-            {isAdminLogin ? (
-              <div className="space-y-1.5">
-                <label className="text-xs font-medium text-neutral-400">
-                  Email de Administrador
-                </label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-black/50 border border-white/10 rounded px-4 py-3 text-sm text-foreground focus:border-primary focus:outline-none transition-colors"
-                  placeholder="admin@torogil.com"
-                  required
-                />
-              </div>
-            ) : (
-              <div className="space-y-1.5">
-                <label className="text-xs font-medium text-neutral-400">
-                  Nombre de Usuario
-                </label>
-                <input
-                  type="text"
-                  value={clientName}
-                  onChange={(e) => setClientName(e.target.value)}
-                  className="w-full bg-black/50 border border-white/10 rounded px-4 py-3 text-sm text-foreground focus:border-primary focus:outline-none transition-colors"
-                  placeholder="Ingrese su nombre completo"
-                  required
-                />
-              </div>
-            )}
+            <div className="space-y-1.5">
+              <label className="text-xs font-medium text-neutral-400">
+                Nombre de Usuario
+              </label>
+              <input
+                type="text"
+                value={clientName}
+                onChange={(e) => setClientName(e.target.value)}
+                className="w-full bg-black/50 border border-white/10 rounded px-4 py-3 text-sm text-foreground focus:border-primary focus:outline-none transition-colors"
+                placeholder="Ingrese su nombre completo"
+                required
+              />
+            </div>
 
             <div className="space-y-1.5">
               <label className="text-xs font-medium text-neutral-400">
