@@ -1,17 +1,9 @@
 import {
   Calculator,
-  Building,
-  Scroll,
-  UserCheck,
-  Award,
-  BarChart,
+  FileText,
+  Scale,
+  MoreHorizontal,
   Check,
-  Landmark,
-  Users,
-  FileSignature,
-  Globe,
-  Stamp,
-  Briefcase,
 } from "lucide-react";
 
 interface ServicesSectionProps {
@@ -20,72 +12,36 @@ interface ServicesSectionProps {
 
 const services = [
   {
-    title: "Trámites Fiscales (SENIAT)",
-    icon: Calculator,
-    bgIcon: Landmark,
-    color: "red",
-    items: [
-      "Inscripción y actualización de RIF",
-      "Declaración de ISLR e IVA",
-      "Gestión de Sucesiones",
-    ],
-  },
-  {
-    title: "Entes Parafiscales",
-    icon: Building,
-    bgIcon: Users,
+    title: "Servicios Administrativos",
+    icon: FileText,
     color: "blue",
-    items: ["IVSS (Seguro Social)", "FAOV (Banavih)", "INCES y MINTRA"],
+    description: "Control y manejo en pagos, cobros, nómina, proveedores, clientes, deberes formales y mucho más.",
   },
   {
-    title: "Registros y Notarías (SAREN)",
-    icon: Scroll,
-    bgIcon: FileSignature,
-    color: "purple",
-    items: [
-      "Actas Constitutivas (PYMES/C.A.)",
-      "Legalizaciones y Ventas",
-      "Registro Mercantil",
-    ],
-  },
-  {
-    title: "Identificación (SAIME)",
-    icon: UserCheck,
-    bgIcon: Globe,
+    title: "Servicios Contables",
+    icon: Calculator,
     color: "green",
-    items: ["Citas de Pasaportes", "Prórrogas", "Datos Filiatorios"],
+    description: "Estados financieros, balances, libros legales, declaraciones y asesoría legal.",
   },
   {
-    title: "Apostilla y Legalización",
-    icon: Award,
-    bgIcon: Stamp,
+    title: "Servicios Legales",
+    icon: Scale,
+    color: "purple",
+    description: "Poderes, divorcios, libros contables, constitución de empresas, firmas personales, IVSS, FAOV, LOCTI y mucho más.",
+  },
+  {
+    title: "Otros Servicios",
+    icon: MoreHorizontal,
     color: "orange",
-    items: [
-      "Apostilla de La Haya",
-      "Legalización de Títulos (GTU)",
-      "Antecedentes Penales",
-    ],
-  },
-  {
-    title: "Gestión Corporativa",
-    icon: BarChart,
-    bgIcon: Briefcase,
-    color: "teal",
-    items: [
-      "RNC (Registro Nacional de Contratistas)",
-      "Balances Contables",
-      "Patentes Municipales (Alcaldías)",
-    ],
+    description: "Patente, impuesto a los grandes patrimonios, certificación de ingresos, balance general, registro de empresa.",
   },
 ];
 
-const colorClasses: Record<string, { icon: string; check: string }> = {
-  red: { icon: "bg-red-500/10 text-red-500", check: "text-red-500" },
-  blue: { icon: "bg-blue-500/10 text-blue-500", check: "text-blue-500" },
-  purple: { icon: "bg-purple-500/10 text-purple-500", check: "text-purple-500" },
-  green: { icon: "bg-green-500/10 text-green-500", check: "text-green-500" },
-  orange: { icon: "bg-orange-500/10 text-orange-500", check: "text-orange-500" },
-  teal: { icon: "bg-teal-500/10 text-teal-500", check: "text-teal-500" },
+const colorClasses: Record<string, { icon: string; border: string }> = {
+  blue: { icon: "bg-blue-500/10 text-blue-500", border: "border-blue-500/20" },
+  green: { icon: "bg-green-500/10 text-green-500", border: "border-green-500/20" },
+  purple: { icon: "bg-purple-500/10 text-purple-500", border: "border-purple-500/20" },
+  orange: { icon: "bg-orange-500/10 text-orange-500", border: "border-orange-500/20" },
 };
 
 const ServicesSection = ({ onNavigate }: ServicesSectionProps) => {
@@ -94,44 +50,34 @@ const ServicesSection = ({ onNavigate }: ServicesSectionProps) => {
       <div className="max-w-7xl mx-auto px-6">
         <div className="mb-16 border-b border-white/10 pb-8">
           <h2 className="text-3xl md:text-4xl font-medium tracking-tight mb-4 text-foreground">
-            Catálogo de Servicios
+            Nuestros Servicios
           </h2>
           <p className="text-neutral-400 max-w-2xl font-light">
-            Cubrimos todas las necesidades administrativas y legales requeridas
-            por los entes gubernamentales venezolanos.
+            Ofrecemos soluciones integrales para todas sus necesidades administrativas, contables y legales.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {services.map((service) => {
             const Icon = service.icon;
-            const BgIcon = service.bgIcon;
             const colors = colorClasses[service.color];
 
             return (
               <div
                 key={service.title}
-                className="group border border-white/10 bg-neutral-900/20 p-8 rounded-xl hover-card relative overflow-hidden"
+                className={`group border ${colors.border} bg-neutral-900/20 p-8 rounded-xl hover:bg-neutral-900/40 transition-all duration-300`}
               >
-                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                  <BgIcon className="w-16 h-16" />
-                </div>
                 <div
-                  className={`w-10 h-10 rounded ${colors.icon} flex items-center justify-center mb-6`}
+                  className={`w-12 h-12 rounded-lg ${colors.icon} flex items-center justify-center mb-6`}
                 >
-                  <Icon className="w-5 h-5" />
+                  <Icon className="w-6 h-6" />
                 </div>
-                <h3 className="text-lg font-semibold text-foreground mb-3">
+                <h3 className="text-xl font-semibold text-foreground mb-3">
                   {service.title}
                 </h3>
-                <ul className="space-y-2 text-sm text-neutral-400">
-                  {service.items.map((item) => (
-                    <li key={item} className="flex items-center gap-2">
-                      <Check className={`w-4 h-4 ${colors.check}`} />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
+                <p className="text-neutral-400 text-sm leading-relaxed">
+                  {service.description}
+                </p>
               </div>
             );
           })}
@@ -143,8 +89,7 @@ const ServicesSection = ({ onNavigate }: ServicesSectionProps) => {
               ¿Necesita algo específico?
             </h3>
             <p className="text-neutral-400 text-sm">
-              Gestionamos cualquier trámite ante la administración pública
-              venezolana.
+              Gestionamos cualquier trámite ante la administración pública venezolana.
             </p>
           </div>
           <button

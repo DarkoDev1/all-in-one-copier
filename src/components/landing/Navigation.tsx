@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Menu, X, ArrowRight, LogIn } from "lucide-react";
 import { Link } from "react-router-dom";
+import logoStg from "@/assets/logo-stg.png";
 
 interface NavigationProps {
   onNavigate: (section: string) => void;
@@ -29,10 +30,11 @@ const Navigation = ({ onNavigate }: NavigationProps) => {
             onClick={() => handleNavigate("inicio")}
             className="flex items-center gap-3 group"
           >
-            <div className="relative w-8 h-8 flex items-center justify-center bg-gradient-to-br from-primary to-red-800 rounded-lg shadow-lg shadow-red-900/20 group-hover:shadow-primary/40 transition-all duration-300">
-              <span className="font-bold text-foreground text-lg">T</span>
-              <div className="absolute inset-0 border border-white/20 rounded-lg"></div>
-            </div>
+            <img 
+              src={logoStg} 
+              alt="Toro Gil Servicios" 
+              className="h-10 w-auto object-contain"
+            />
             <div className="flex flex-col">
               <span className="text-sm font-semibold tracking-tight text-foreground leading-none">
                 TORO GIL

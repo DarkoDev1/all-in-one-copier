@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { LogOut, FileText, Download, FolderOpen } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import logoStg from "@/assets/logo-stg.png";
 
 interface ClientFile {
   id: string;
@@ -130,9 +131,11 @@ const ClientPanel = () => {
       <header className="border-b border-white/10 bg-black/80 backdrop-blur-xl sticky top-0 z-50">
         <div className="max-w-4xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 flex items-center justify-center bg-gradient-to-br from-primary to-red-800 rounded-lg">
-              <span className="font-bold text-foreground text-lg">T</span>
-            </div>
+            <img 
+              src={logoStg} 
+              alt="Toro Gil Servicios" 
+              className="h-10 w-auto object-contain"
+            />
             <div>
               <span className="text-sm font-semibold text-foreground">
                 Portal de Cliente
