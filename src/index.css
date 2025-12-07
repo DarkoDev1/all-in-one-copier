@@ -75,8 +75,8 @@
     @apply text-foreground antialiased;
     font-family: 'Plus Jakarta Sans', sans-serif;
     overflow-x: hidden;
-    background: radial-gradient(ellipse 80% 50% at 50% -20%, hsl(0 70% 15%), hsl(0 0% 1%) 70%);
-    background-attachment: fixed;
+    background: radial-gradient(ellipse 100% 80% at 50% 0%, hsl(0 80% 20%), hsl(0 0% 2%) 60%);
+    min-height: 100vh;
   }
 
   ::selection {
