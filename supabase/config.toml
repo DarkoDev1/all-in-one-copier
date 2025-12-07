@@ -1,7 +1,1 @@
-project_id = "gjsglrhuhppmbadbsesz"
-
-[functions.authenticate]
-verify_jwt = false
-
-[functions.get-clients]
-verify_jwt = true
+project_id = "hqddzwanpgytlaplqqty"
