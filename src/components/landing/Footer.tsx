@@ -6,7 +6,7 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
         <div className="text-center md:text-left">
           <span className="text-sm font-bold text-foreground tracking-tight">
-            TORO GIL SERVICIOS C.A.
+            SERVICIOS TORO, GIL & ASOCIADOS, C.A.
           </span>
           <p className="text-xs text-neutral-500 mt-1">
             J-50226323-3 | Caracas - Miranda, Venezuela
