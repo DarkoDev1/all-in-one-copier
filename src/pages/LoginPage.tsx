@@ -141,7 +141,7 @@ const LoginPage = () => {
               Iniciar Sesión
             </h1>
             <p className="text-sm text-neutral-400 mt-2">
-              {isAdminLogin ? "Acceso de administrador" : "Ingrese sus credenciales para continuar"}
+              Ingrese sus credenciales para continuar
             </p>
           </div>
 
