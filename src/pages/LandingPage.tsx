@@ -4,6 +4,7 @@ import HeroSection from "@/components/landing/HeroSection";
 import FeaturesStrip from "@/components/landing/FeaturesStrip";
 import ServicesSection from "@/components/landing/ServicesSection";
 import TestimonialsSection from "@/components/landing/TestimonialsSection";
+import LogoStrip from "@/components/landing/LogoStrip";
 import ContactSection from "@/components/landing/ContactSection";
 import Footer from "@/components/landing/Footer";
 
@@ -50,6 +51,9 @@ const LandingPage = () => {
         <section ref={testimoniosRef} id="testimonios">
           <TestimonialsSection />
         </section>
+        
+        {/* Logo Strip */}
+        <LogoStrip />
         
         {/* Contact Section */}
         <section ref={contactoRef} id="contacto">
