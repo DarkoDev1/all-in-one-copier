@@ -6,7 +6,7 @@
 
 @layer base {
   :root {
-    --background: 0 100% 1%;
+    --background: 0 0% 1%;
     --foreground: 0 0% 100%;
 
     --card: 0 0% 5%;
@@ -44,7 +44,7 @@
   }
 
   .dark {
-    --background: 0 100% 1%;
+    --background: 0 0% 1%;
     --foreground: 0 0% 100%;
     --card: 0 0% 5%;
     --card-foreground: 0 0% 100%;
@@ -72,9 +72,11 @@
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply text-foreground antialiased;
     font-family: 'Plus Jakarta Sans', sans-serif;
     overflow-x: hidden;
+    background: radial-gradient(ellipse 80% 50% at 50% -20%, hsl(0 70% 15%), hsl(0 0% 1%) 70%);
+    background-attachment: fixed;
   }
 
   ::selection {
