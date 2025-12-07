@@ -133,7 +133,7 @@ const ClientPanel = () => {
           <div className="flex items-center gap-3">
             <img 
               src={logoStg} 
-              alt="Toro Gil Servicios" 
+              alt="Servicios Toro, Gil & Asociados" 
               className="h-10 w-auto object-contain"
             />
             <div>

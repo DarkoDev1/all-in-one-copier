@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff, LogIn, ArrowLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import logoStg from "@/assets/logo-stg.png";
 
 // Admin credentials
 const ADMIN_USER = "Felix Manuel Toro Gil";
@@ -93,11 +94,13 @@ const LoginPage = () => {
 
         <div className="bg-neutral-900/50 border border-white/10 rounded-2xl p-8">
           <div className="text-center mb-8">
-            <div className="w-12 h-12 mx-auto mb-4 flex items-center justify-center bg-gradient-to-br from-primary to-red-800 rounded-xl">
-              <span className="font-bold text-foreground text-xl">T</span>
-            </div>
+            <img 
+              src={logoStg} 
+              alt="Servicios Toro, Gil & Asociados" 
+              className="w-16 h-16 mx-auto mb-4 object-contain"
+            />
             <h1 className="text-2xl font-medium text-foreground">
-              Acceso al Portal
+              Iniciar Sesión
             </h1>
             <p className="text-sm text-neutral-400 mt-2">
               Ingrese sus credenciales para continuar

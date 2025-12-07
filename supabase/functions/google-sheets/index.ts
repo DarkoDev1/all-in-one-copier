@@ -39,9 +39,10 @@ serve(async (req) => {
     console.log('Sheet data fetched successfully, rows:', rows.length);
     console.log('Raw rows data:', JSON.stringify(rows));
     
-    // Parse ALL rows - no skipping header since sheet may not have one
+    // Skip first row (headers) and parse remaining rows
     // Filter out rows that don't have both name and password
     const clients = rows
+      .slice(1) // Skip header row
       .map((row: string[]) => ({
         name: (row[0] || '').trim(),
         password: (row[1] || '').trim(),
