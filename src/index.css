@@ -72,11 +72,9 @@
   }
 
   body {
-    @apply text-foreground antialiased;
+    @apply bg-background text-foreground antialiased;
     font-family: 'Plus Jakarta Sans', sans-serif;
     overflow-x: hidden;
-    background: radial-gradient(ellipse 100% 80% at 50% 0%, hsl(0 80% 20%), hsl(0 0% 2%) 60%);
-    min-height: 100vh;
   }
 
   ::selection {
