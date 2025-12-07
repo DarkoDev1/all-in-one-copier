@@ -69,7 +69,7 @@ const TestimonialsSection = () => {
           {testimonials.map((testimonial, index) => (
             <div
               key={index}
-              className="bg-background/50 border border-white/10 p-8 rounded-2xl flex flex-col justify-between hover-card"
+              className="group bg-background/50 border border-white/10 p-8 rounded-2xl flex flex-col justify-between hover-card"
             >
               <div className="mb-6">
                 <p className="text-neutral-300 text-sm leading-relaxed italic">
@@ -77,11 +77,13 @@ const TestimonialsSection = () => {
                 </p>
               </div>
               <div className="flex items-center gap-4 pt-4 border-t border-white/5">
-                <img
-                  src={testimonial.logo}
-                  alt={testimonial.company}
-                  className="w-12 h-12 object-contain grayscale hover:grayscale-0 transition-all duration-300"
-                />
+                <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0 bg-white">
+                  <img
+                    src={testimonial.logo}
+                    alt={testimonial.company}
+                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300"
+                  />
+                </div>
                 <div>
                   <h4 className="text-foreground text-sm font-medium">
                     {testimonial.name}
