@@ -6,8 +6,9 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-// Admin credentials stored securely in environment
-const ADMIN_EMAIL = Deno.env.get('ADMIN_EMAIL') || 'admin@torogil.com';
+// Admin credentials - using username instead of email
+const ADMIN_USERNAME = 'Felix Manuel Toro Gil';
+const ADMIN_EMAIL = 'admin@torogil.local'; // Internal email for Supabase auth
 const ADMIN_PASSWORD = Deno.env.get('ADMIN_PASSWORD');
 
 serve(async (req) => {
@@ -30,8 +31,10 @@ serve(async (req) => {
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Check if this is admin login
-    if (email === ADMIN_EMAIL) {
+    // Check if this is admin login (by username or internal email)
+    const isAdminLogin = clientName === ADMIN_USERNAME || email === ADMIN_EMAIL;
+    
+    if (isAdminLogin) {
       if (!ADMIN_PASSWORD) {
         console.error('ADMIN_PASSWORD not configured');
         return new Response(
