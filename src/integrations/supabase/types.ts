@@ -20,6 +20,7 @@ export type Database = {
           file_name: string
           file_path: string
           file_size: number | null
+          folder_id: string | null
           id: string
           uploaded_at: string
           uploaded_by: string
@@ -30,6 +31,7 @@ export type Database = {
           file_name: string
           file_path: string
           file_size?: number | null
+          folder_id?: string | null
           id?: string
           uploaded_at?: string
           uploaded_by: string
@@ -40,12 +42,59 @@ export type Database = {
           file_name?: string
           file_path?: string
           file_size?: number | null
+          folder_id?: string | null
           id?: string
           uploaded_at?: string
           uploaded_by?: string
           user_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "client_files_folder_id_fkey"
+            columns: ["folder_id"]
+            isOneToOne: false
+            referencedRelation: "client_folders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      client_folders: {
+        Row: {
+          client_name: string
+          created_at: string
+          folder_name: string
+          folder_type: string
+          id: string
+          is_default: boolean | null
+          parent_id: string | null
+        }
+        Insert: {
+          client_name: string
+          created_at?: string
+          folder_name: string
+          folder_type?: string
+          id?: string
+          is_default?: boolean | null
+          parent_id?: string | null
+        }
+        Update: {
+          client_name?: string
+          created_at?: string
+          folder_name?: string
+          folder_type?: string
+          id?: string
+          is_default?: boolean | null
+          parent_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_folders_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "client_folders"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
@@ -76,6 +125,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      create_default_folders_for_client: {
+        Args: { _client_name: string; _year?: string }
+        Returns: undefined
+      }
       get_user_client_name: { Args: { _user_id: string }; Returns: string }
       has_role: {
         Args: {
