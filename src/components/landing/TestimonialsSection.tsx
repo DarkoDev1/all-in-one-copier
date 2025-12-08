@@ -34,7 +34,7 @@ const testimonials = [
   {
     name: "Winston Toro",
     company: "Inversiones Picadero Western, C.A.",
-    text: "Recomendados completamente, expertos en su rama y servicios.",
+    text: "Excelente servicio, siempre atentos a las necesidades del cliente. Su profesionalismo y dedicación hacen la diferencia.",
     logo: picaderoWesternLogo,
   },
   {
