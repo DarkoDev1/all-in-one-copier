@@ -18,7 +18,7 @@ const HeroSection = ({ onNavigate }: HeroSectionProps) => {
       <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 text-neutral-400 text-[11px] font-medium tracking-wide uppercase mb-8 backdrop-blur-sm animate-fade-in">
           <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse-slow"></span>
-          Gestión Administrativa en Venezuela
+          Gestión Administrativa, legal y tributaria en Venezuela
         </div>
 
         <h1 className="text-5xl md:text-7xl font-medium tracking-tight text-foreground leading-[1.1] mb-8">
@@ -29,9 +29,7 @@ const HeroSection = ({ onNavigate }: HeroSectionProps) => {
         </h1>
 
         <p className="text-lg text-neutral-400 max-w-2xl mx-auto leading-relaxed font-light mb-10">
-          Simplificamos la burocracia. Desde trámites del SENIAT y SAIME hasta
-          registros mercantiles. Su aliado estratégico para navegar el sistema
-          legal y administrativo venezolano.
+          Firma de contadores y abogados con más de 8 años de experiencia en el mercado con el objetivo de dar a los clientes servicios contables, administrativos y legales de alta calidad, con profesionales expertos y actualizados, equipados con herramientas de vanguardia para solventar sus necesidades y resolver problemas.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
