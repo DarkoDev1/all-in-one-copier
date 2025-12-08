@@ -36,10 +36,7 @@ const Navigation = ({ currentPage, onNavigate }: NavigationProps) => {
             </div>
             <div className="flex flex-col">
               <span className="text-sm font-semibold tracking-tight text-foreground leading-none">
-                TORO GIL
-              </span>
-              <span className="text-[10px] text-neutral-500 font-medium tracking-wider uppercase mt-0.5">
-                Servicios C.A.
+                SERVICIOS TORO, GIL & ASOCIADOS, C.A.
               </span>
             </div>
           </button>
