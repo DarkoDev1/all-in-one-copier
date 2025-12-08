@@ -1,7 +1,7 @@
 import vybLogo from "@/assets/testimonials/vyb.png";
 import marinLogo from "@/assets/testimonials/marin.png";
 import tsolutionsLogo from "@/assets/testimonials/tsolutions.png";
-import calomiLogo from "@/assets/testimonials/calomi.png";
+
 import brasasGusLogo from "@/assets/testimonials/brasas-gus.png";
 import picaderoWesternLogo from "@/assets/testimonials/picadero-western.png";
 import andaraLogo from "@/assets/testimonials/andara.jpg";
@@ -26,12 +26,6 @@ const testimonials = [
     logo: tsolutionsLogo,
   },
   {
-    name: "Michelle Campo",
-    company: "Inversiones Mundo Calomistore, C.A.",
-    text: "Recomendados completamente, expertos en su rama y servicios.",
-    logo: calomiLogo,
-  },
-  {
     name: "Gustavo González",
     company: "Inversiones González G 751, F.P.",
     text: "Realizaron mi constitución de empresa, llevan mi contabilidad y la verdad excelente servicio.",
@@ -40,7 +34,7 @@ const testimonials = [
   {
     name: "Winston Toro",
     company: "Inversiones Picadero Western, C.A.",
-    text: "Voluptas sit aspernatur aut odit aut fugit sed quia consequuntur magni.",
+    text: "Recomendados completamente, expertos en su rama y servicios.",
     logo: picaderoWesternLogo,
   },
   {
