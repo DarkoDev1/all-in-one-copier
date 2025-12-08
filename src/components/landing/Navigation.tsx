@@ -28,21 +28,13 @@ const Navigation = ({ onNavigate }: NavigationProps) => {
           {/* Logo */}
           <button
             onClick={() => handleNavigate("inicio")}
-            className="flex items-center gap-3 group"
+            className="flex items-center group"
           >
             <img 
               src={logoStg} 
               alt="Servicios Toro, Gil & Asociados" 
               className="h-10 w-auto object-contain"
             />
-            <div className="flex flex-col">
-              <span className="text-sm font-semibold tracking-tight text-foreground leading-none">
-                TORO, GIL & ASOCIADOS
-              </span>
-              <span className="text-[10px] text-neutral-500 font-medium tracking-wider uppercase mt-0.5">
-                C.A.
-              </span>
-            </div>
           </button>
 
           {/* Desktop Menu */}
