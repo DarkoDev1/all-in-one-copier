@@ -206,6 +206,12 @@ const AdminPanel = () => {
     }
   };
 
+  const MONTH_ORDER: Record<string, number> = {
+    "Enero": 1, "Febrero": 2, "Marzo": 3, "Abril": 4,
+    "Mayo": 5, "Junio": 6, "Julio": 7, "Agosto": 8,
+    "Septiembre": 9, "Octubre": 10, "Noviembre": 11, "Diciembre": 12,
+  };
+
   const buildFolderTree = useCallback((): FolderTreeNode[] => {
     const folderMap = new Map<string, FolderTreeNode>();
     
@@ -239,9 +245,18 @@ const AdminPanel = () => {
           children: sortChildren(node.children),
         }))
         .sort((a, b) => {
-          // Years first (descending), then alphabetically
+          // Years descending
           if (a.folder_type === "year" && b.folder_type === "year") {
             return b.folder_name.localeCompare(a.folder_name);
+          }
+          // Months by calendar order
+          if (a.folder_type === "month" && b.folder_type === "month") {
+            return (MONTH_ORDER[a.folder_name] || 99) - (MONTH_ORDER[b.folder_name] || 99);
+          }
+          // Root folders: Administración first
+          if (a.folder_type === "root" && b.folder_type === "root") {
+            if (a.folder_name === "Administración") return -1;
+            if (b.folder_name === "Administración") return 1;
           }
           return a.folder_name.localeCompare(b.folder_name);
         });
