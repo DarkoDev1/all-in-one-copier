@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Phone, Mail, MapPin, ChevronDown, Instagram, FileText } from "lucide-react";
+import { Phone, Mail, MapPin, ChevronDown, Instagram, FileText, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const ContactSection = () => {
   const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -12,19 +13,54 @@ const ContactSection = () => {
     details: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Mensaje enviado",
-      description: "Pronto le contactaremos.",
-    });
-    setFormData({
-      name: "",
-      phone: "",
-      email: "",
-      serviceType: "",
-      details: "",
-    });
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch(
+        "https://api-n8n.mynexusdigital.com/webhook/c56593d4-1d90-4297-b3a6-14d5e4056137",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            nombre: formData.name,
+            telefono: formData.phone,
+            email: formData.email,
+            tipoServicio: formData.serviceType,
+            detalles: formData.details,
+            fechaEnvio: new Date().toISOString(),
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Error al enviar el formulario");
+      }
+
+      toast({
+        title: "Mensaje enviado",
+        description: "Pronto le contactaremos.",
+      });
+      setFormData({
+        name: "",
+        phone: "",
+        email: "",
+        serviceType: "",
+        details: "",
+      });
+    } catch (error) {
+      console.error("Error sending form:", error);
+      toast({
+        title: "Error",
+        description: "No se pudo enviar el mensaje. Intente nuevamente.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
