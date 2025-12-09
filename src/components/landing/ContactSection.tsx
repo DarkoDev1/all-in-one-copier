@@ -225,9 +225,17 @@ const ContactSection = () => {
               </div>
               <button
                 type="submit"
-                className="w-full bg-primary hover:bg-red-500 text-foreground font-medium text-sm py-3 rounded transition-all shadow-lg shadow-red-900/20"
+                disabled={isSubmitting}
+                className="w-full bg-primary hover:bg-red-500 text-foreground font-medium text-sm py-3 rounded transition-all shadow-lg shadow-red-900/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
-                Enviar Mensaje
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Enviando...
+                  </>
+                ) : (
+                  "Enviar Mensaje"
+                )}
               </button>
             </form>
           </div>
