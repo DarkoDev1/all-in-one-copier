@@ -19,7 +19,7 @@ const ContactSection = () => {
 
     try {
       const response = await fetch(
-        "https://api-n8n.mynexusdigital.com/webhook/c56593d4-1d90-4297-b3a6-14d5e4056137",
+        "https://api-n8n.mynexusdigital.com/webhook/Formulario",
         {
           method: "POST",
           headers: {
