@@ -24,7 +24,7 @@ const Navigation = ({ onNavigate }: NavigationProps) => {
   return (
     <>
       <nav className="fixed top-0 w-full z-50 border-b border-white/5 bg-black/80 backdrop-blur-xl supports-[backdrop-filter]:bg-black/60">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-center gap-8">
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           {/* Logo */}
           <button
             onClick={() => handleNavigate("inicio")}
@@ -37,8 +37,8 @@ const Navigation = ({ onNavigate }: NavigationProps) => {
             />
           </button>
 
-          {/* Desktop Menu */}
-          <div className="hidden md:flex items-center gap-1 bg-white/5 p-1 rounded-full border border-white/5">
+          {/* Desktop Menu - Centered */}
+          <div className="hidden md:flex items-center gap-1 bg-white/5 p-1 rounded-full border border-white/5 absolute left-1/2 -translate-x-1/2">
             {navItems.map((item) => (
               <button
                 key={item.id}
