@@ -24,7 +24,7 @@ const Navigation = ({ onNavigate }: NavigationProps) => {
   return (
     <>
       <nav className="fixed top-0 w-full z-50 border-b border-white/5 bg-black/80 backdrop-blur-xl supports-[backdrop-filter]:bg-black/60">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-center gap-8">
           {/* Logo */}
           <button
             onClick={() => handleNavigate("inicio")}
