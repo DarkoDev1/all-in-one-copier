@@ -173,28 +173,46 @@ const ClientPanel = () => {
   };
 
   const handleDownload = async (file: ClientFile) => {
+    console.log("Starting download for:", file.file_name, "Path:", file.file_path);
+    
     try {
+      toast({ title: "Descargando...", description: file.file_name });
+      
       const { data, error } = await supabase.storage
         .from("client-documents")
         .download(file.file_path);
 
-      if (error) throw error;
+      console.log("Download response - data:", data, "error:", error);
+
+      if (error) {
+        console.error("Supabase storage error:", error);
+        throw error;
+      }
+
+      if (!data) {
+        throw new Error("No se recibieron datos del archivo");
+      }
 
       const url = URL.createObjectURL(data);
       const a = document.createElement("a");
       a.href = url;
       a.download = file.file_name;
+      a.style.display = "none";
       document.body.appendChild(a);
       a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      
+      // Cleanup after a short delay
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 100);
 
-      toast({ title: "Descarga iniciada", description: file.file_name });
-    } catch (error) {
+      toast({ title: "Descarga completada", description: file.file_name });
+    } catch (error: any) {
       console.error("Error downloading file:", error);
       toast({
-        title: "Error",
-        description: "No se pudo descargar el archivo",
+        title: "Error al descargar",
+        description: error?.message || "No se pudo descargar el archivo",
         variant: "destructive",
       });
     }
@@ -265,8 +283,11 @@ const ClientPanel = () => {
                   </div>
                 </div>
                 <button
-                  onClick={() => handleDownload(file)}
-                  className="flex items-center gap-1 px-3 py-1.5 bg-primary hover:bg-red-500 text-foreground text-xs font-medium rounded transition-colors opacity-0 group-hover:opacity-100"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDownload(file);
+                  }}
+                  className="flex items-center gap-1 px-3 py-1.5 bg-primary hover:bg-red-500 text-foreground text-xs font-medium rounded transition-colors md:opacity-0 md:group-hover:opacity-100"
                 >
                   <Download className="w-3 h-3" />
                   Descargar
