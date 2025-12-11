@@ -13,9 +13,12 @@ serve(async (req) => {
   }
 
   try {
+    console.log('get-clients: Request received');
+    
     // Verify JWT - this function requires authentication
     const authHeader = req.headers.get('authorization');
     if (!authHeader) {
+      console.log('get-clients: Missing authorization header');
       return new Response(
         JSON.stringify({ error: 'Missing authorization header' }),
         { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -34,11 +37,14 @@ serve(async (req) => {
     const { data: { user }, error: userError } = await supabaseUser.auth.getUser();
     
     if (userError || !user) {
+      console.log('get-clients: Invalid authentication', userError?.message);
       return new Response(
         JSON.stringify({ error: 'Invalid authentication' }),
         { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
+
+    console.log('get-clients: User authenticated:', user.id);
 
     // Use service role to check if user is admin
     const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
@@ -50,17 +56,28 @@ serve(async (req) => {
       .eq('role', 'admin')
       .maybeSingle();
 
-    if (roleError || !roleData) {
+    if (roleError) {
+      console.error('get-clients: Error checking role:', roleError);
+      return new Response(
+        JSON.stringify({ error: 'Error checking permissions' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    if (!roleData) {
+      console.log('get-clients: User is not admin');
       return new Response(
         JSON.stringify({ error: 'Access denied. Admin role required.' }),
         { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
+    console.log('get-clients: Admin verified, fetching from Google Sheets...');
+
     // Admin verified - fetch clients from Google Sheets
     const apiKey = Deno.env.get('GOOGLE_SHEETS_API_KEY');
     if (!apiKey) {
-      console.error('GOOGLE_SHEETS_API_KEY not configured');
+      console.error('get-clients: GOOGLE_SHEETS_API_KEY not configured');
       return new Response(
         JSON.stringify({ error: 'Server configuration error' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -71,13 +88,12 @@ serve(async (req) => {
     const range = 'A:A'; // Only fetch names, NOT passwords
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`;
 
-    console.log('Fetching client names for admin...');
-    
     const response = await fetch(url);
     if (!response.ok) {
-      console.error('Google Sheets API error:', await response.text());
+      const errorText = await response.text();
+      console.error('get-clients: Google Sheets API error:', errorText);
       return new Response(
-        JSON.stringify({ error: 'Failed to fetch clients' }),
+        JSON.stringify({ error: 'Failed to fetch clients from sheet' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
@@ -91,7 +107,7 @@ serve(async (req) => {
       .map((row: string[]) => ({ name: (row[0] || '').trim() }))
       .filter((client: { name: string }) => client.name.length > 0);
 
-    console.log('Clients fetched:', clients.length);
+    console.log('get-clients: Successfully fetched', clients.length, 'clients');
 
     return new Response(
       JSON.stringify({ clients }),
@@ -100,7 +116,7 @@ serve(async (req) => {
 
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    console.error('Error in get-clients function:', errorMessage);
+    console.error('get-clients: Unexpected error:', errorMessage);
     return new Response(
       JSON.stringify({ error: 'Failed to fetch clients' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
