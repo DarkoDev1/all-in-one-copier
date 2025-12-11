@@ -1,12 +1,11 @@
 import { ShieldCheck, Zap, Briefcase } from "lucide-react";
-
 interface HeroSectionProps {
   onNavigate: (section: string) => void;
 }
-
-const HeroSection = ({ onNavigate }: HeroSectionProps) => {
-  return (
-    <div className="relative h-[90vh] flex items-center justify-center overflow-hidden">
+const HeroSection = ({
+  onNavigate
+}: HeroSectionProps) => {
+  return <div className="relative h-[90vh] flex items-center justify-center overflow-hidden">
       {/* Background FX */}
       <div className="absolute inset-0 z-0">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[120px]"></div>
@@ -28,27 +27,17 @@ const HeroSection = ({ onNavigate }: HeroSectionProps) => {
           </span>
         </h1>
 
-        <p className="text-lg text-neutral-400 max-w-2xl mx-auto leading-relaxed font-light mb-10">
-          Firma de contadores y abogados con más de 8 años de experiencia en el mercado con el objetivo de dar a los clientes servicios contables, administrativos y legales de alta calidad, con profesionales expertos y actualizados, equipados con herramientas de vanguardia para solventar sus necesidades y resolver problemas.
-        </p>
+        <p className="text-lg text-neutral-400 max-w-2xl mx-auto leading-relaxed font-light mb-10">Somos una firma de contadores y abogados con más de 8 años de experiencia en el mercado, con el objetivo de brindarles a los clientes nuestros servicios contables, administrativos y legales de alta calidad, de la mano de profesionales  y expertos en la materia, equipados con herramientas de vanguardia para solventar sus necesidades y problemas.</p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <button
-            onClick={() => onNavigate("servicios")}
-            className="w-full sm:w-auto px-8 py-3.5 bg-primary hover:bg-red-500 text-foreground font-medium text-sm rounded transition-all shadow-glow hover:shadow-glow-hover"
-          >
+          <button onClick={() => onNavigate("servicios")} className="w-full sm:w-auto px-8 py-3.5 bg-primary hover:bg-red-500 text-foreground font-medium text-sm rounded transition-all shadow-glow hover:shadow-glow-hover">
             Explorar Servicios
           </button>
-          <button
-            onClick={() => onNavigate("contacto")}
-            className="w-full sm:w-auto px-8 py-3.5 bg-transparent border border-white/10 hover:bg-white/5 text-foreground font-medium text-sm rounded transition-colors flex items-center justify-center gap-2"
-          >
+          <button onClick={() => onNavigate("contacto")} className="w-full sm:w-auto px-8 py-3.5 bg-transparent border border-white/10 hover:bg-white/5 text-foreground font-medium text-sm rounded transition-colors flex items-center justify-center gap-2">
             Agendar Consulta
           </button>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default HeroSection;
