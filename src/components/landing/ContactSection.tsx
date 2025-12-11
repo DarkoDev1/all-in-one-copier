@@ -1,70 +1,62 @@
 import { useState } from "react";
 import { Phone, Mail, MapPin, ChevronDown, Instagram, FileText, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-
 const ContactSection = () => {
-  const { toast } = useToast();
+  const {
+    toast
+  } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
     email: "",
     serviceType: "",
-    details: "",
+    details: ""
   });
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-
     try {
-      const response = await fetch(
-        "https://api-n8n.mynexusdigital.com/webhook/Formulario",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            nombre: formData.name,
-            telefono: formData.phone,
-            email: formData.email,
-            tipoServicio: formData.serviceType,
-            detalles: formData.details,
-            fechaEnvio: new Date().toISOString(),
-          }),
-        }
-      );
-
+      const response = await fetch("https://api-n8n.mynexusdigital.com/webhook/Formulario", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          nombre: formData.name,
+          telefono: formData.phone,
+          email: formData.email,
+          tipoServicio: formData.serviceType,
+          detalles: formData.details,
+          fechaEnvio: new Date().toISOString()
+        })
+      });
       if (!response.ok) {
         throw new Error("Error al enviar el formulario");
       }
-
       toast({
         title: "Mensaje enviado",
-        description: "Pronto le contactaremos.",
+        description: "Pronto le contactaremos."
       });
       setFormData({
         name: "",
         phone: "",
         email: "",
         serviceType: "",
-        details: "",
+        details: ""
       });
     } catch (error) {
       console.error("Error sending form:", error);
       toast({
         title: "Error",
         description: "No se pudo enviar el mensaje. Intente nuevamente.",
-        variant: "destructive",
+        variant: "destructive"
       });
     } finally {
       setIsSubmitting(false);
     }
   };
-
-  return (
-    <div className="py-24 bg-background">
+  return <div className="py-24 bg-background">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <div>
@@ -112,7 +104,7 @@ const ContactSection = () => {
                     Ubicación
                   </p>
                   <p className="text-foreground text-sm">Caracas - Miranda</p>
-                  <p className="text-neutral-400 text-sm">Baruta, Zona La Trinidad</p>
+                  <p className="text-neutral-400 text-sm">C.C. Paseo el Hatillo</p>
                 </div>
               </div>
 
@@ -149,57 +141,39 @@ const ContactSection = () => {
                   <label className="text-xs font-medium text-neutral-400">
                     Nombre
                   </label>
-                  <input
-                    type="text"
-                    value={formData.name}
-                    onChange={(e) =>
-                      setFormData({ ...formData, name: e.target.value })
-                    }
-                    className="w-full bg-black/50 border border-white/10 rounded px-3 py-2.5 text-sm text-foreground focus:border-primary focus:outline-none transition-colors"
-                    placeholder="Su nombre"
-                  />
+                  <input type="text" value={formData.name} onChange={e => setFormData({
+                  ...formData,
+                  name: e.target.value
+                })} className="w-full bg-black/50 border border-white/10 rounded px-3 py-2.5 text-sm text-foreground focus:border-primary focus:outline-none transition-colors" placeholder="Su nombre" />
                 </div>
                 <div className="space-y-1.5">
                   <label className="text-xs font-medium text-neutral-400">
                     Teléfono
                   </label>
-                  <input
-                    type="tel"
-                    value={formData.phone}
-                    onChange={(e) =>
-                      setFormData({ ...formData, phone: e.target.value })
-                    }
-                    className="w-full bg-black/50 border border-white/10 rounded px-3 py-2.5 text-sm text-foreground focus:border-primary focus:outline-none transition-colors"
-                    placeholder="0412-1234567"
-                  />
+                  <input type="tel" value={formData.phone} onChange={e => setFormData({
+                  ...formData,
+                  phone: e.target.value
+                })} className="w-full bg-black/50 border border-white/10 rounded px-3 py-2.5 text-sm text-foreground focus:border-primary focus:outline-none transition-colors" placeholder="0412-1234567" />
                 </div>
               </div>
               <div className="space-y-1.5">
                 <label className="text-xs font-medium text-neutral-400">
                   Correo Electrónico
                 </label>
-                <input
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
-                  }
-                  className="w-full bg-black/50 border border-white/10 rounded px-3 py-2.5 text-sm text-foreground focus:border-primary focus:outline-none transition-colors"
-                  placeholder="ejemplo@correo.com"
-                />
+                <input type="email" value={formData.email} onChange={e => setFormData({
+                ...formData,
+                email: e.target.value
+              })} className="w-full bg-black/50 border border-white/10 rounded px-3 py-2.5 text-sm text-foreground focus:border-primary focus:outline-none transition-colors" placeholder="ejemplo@correo.com" />
               </div>
               <div className="space-y-1.5">
                 <label className="text-xs font-medium text-neutral-400">
                   Tipo de Trámite
                 </label>
                 <div className="relative">
-                  <select
-                    value={formData.serviceType}
-                    onChange={(e) =>
-                      setFormData({ ...formData, serviceType: e.target.value })
-                    }
-                    className="w-full bg-black/50 border border-white/10 rounded px-3 py-2.5 text-sm text-foreground focus:border-primary focus:outline-none transition-colors appearance-none"
-                  >
+                  <select value={formData.serviceType} onChange={e => setFormData({
+                  ...formData,
+                  serviceType: e.target.value
+                })} className="w-full bg-black/50 border border-white/10 rounded px-3 py-2.5 text-sm text-foreground focus:border-primary focus:outline-none transition-colors appearance-none">
                     <option value="">Seleccione una opción</option>
                     <option value="contables">Servicios Contables</option>
                     <option value="administrativos">Servicios Administrativos</option>
@@ -213,36 +187,21 @@ const ContactSection = () => {
                 <label className="text-xs font-medium text-neutral-400">
                   Detalles
                 </label>
-                <textarea
-                  rows={4}
-                  value={formData.details}
-                  onChange={(e) =>
-                    setFormData({ ...formData, details: e.target.value })
-                  }
-                  className="w-full bg-black/50 border border-white/10 rounded px-3 py-2.5 text-sm text-foreground focus:border-primary focus:outline-none transition-colors resize-none"
-                  placeholder="Describa brevemente lo que necesita..."
-                ></textarea>
+                <textarea rows={4} value={formData.details} onChange={e => setFormData({
+                ...formData,
+                details: e.target.value
+              })} className="w-full bg-black/50 border border-white/10 rounded px-3 py-2.5 text-sm text-foreground focus:border-primary focus:outline-none transition-colors resize-none" placeholder="Describa brevemente lo que necesita..."></textarea>
               </div>
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-primary hover:bg-red-500 text-foreground font-medium text-sm py-3 rounded transition-all shadow-lg shadow-red-900/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-              >
-                {isSubmitting ? (
-                  <>
+              <button type="submit" disabled={isSubmitting} className="w-full bg-primary hover:bg-red-500 text-foreground font-medium text-sm py-3 rounded transition-all shadow-lg shadow-red-900/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                {isSubmitting ? <>
                     <Loader2 className="w-4 h-4 animate-spin" />
                     Enviando...
-                  </>
-                ) : (
-                  "Enviar Mensaje"
-                )}
+                  </> : "Enviar Mensaje"}
               </button>
             </form>
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default ContactSection;
