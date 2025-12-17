@@ -19,9 +19,11 @@ export const useAuth = () => {
       (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
-        
-        // Defer role fetching with setTimeout to prevent deadlock
+
+        // IMPORTANT: keep loading=true until we also know the role
         if (session?.user) {
+          setIsLoading(true);
+          // Defer role fetching with setTimeout to prevent deadlock
           setTimeout(() => {
             fetchUserRole(session.user.id);
           }, 0);
@@ -36,8 +38,9 @@ export const useAuth = () => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
-      
+
       if (session?.user) {
+        setIsLoading(true);
         fetchUserRole(session.user.id);
       } else {
         setIsLoading(false);
