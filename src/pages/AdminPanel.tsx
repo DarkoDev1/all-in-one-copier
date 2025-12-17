@@ -139,7 +139,16 @@ const AdminPanel = () => {
   const fetchClients = async () => {
     setIsLoadingClients(true);
     try {
-      const { data, error } = await supabase.functions.invoke("get-clients");
+      const { data: { session } } = await supabase.auth.getSession();
+      const headers = session?.access_token
+        ? { Authorization: `Bearer ${session.access_token}` }
+        : undefined;
+
+      const { data, error } = await supabase.functions.invoke(
+        "get-clients",
+        headers ? { headers } : {}
+      );
+
       if (error) throw error;
       setClients(data?.clients || []);
     } catch (error) {

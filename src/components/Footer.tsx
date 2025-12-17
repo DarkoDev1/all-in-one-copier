@@ -15,20 +15,29 @@ const Footer = () => {
 
         <div className="flex gap-6">
           <a
-            href="#"
+            href="https://www.instagram.com/serviciostorogil/"
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-neutral-500 hover:text-foreground transition-colors"
+            aria-label="Instagram"
           >
             <Instagram className="w-[18px] h-[18px]" />
           </a>
           <a
-            href="#"
+            href="https://www.facebook.com/serviciostorogil"
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-neutral-500 hover:text-foreground transition-colors"
+            aria-label="Facebook"
           >
             <Facebook className="w-[18px] h-[18px]" />
           </a>
           <a
-            href="#"
+            href="https://api.whatsapp.com/send/?phone=%2B584241950932&text&type=phone_number&app_absent=0"
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-neutral-500 hover:text-foreground transition-colors"
+            aria-label="WhatsApp"
           >
             <MessageCircle className="w-[18px] h-[18px]" />
           </a>

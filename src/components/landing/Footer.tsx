@@ -15,7 +15,7 @@ const Footer = () => {
 
         <div className="flex gap-6">
           <a
-            href="https://instagram.com/torogilservicios"
+            href="https://www.instagram.com/serviciostorogil/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-neutral-500 hover:text-foreground transition-colors"
@@ -51,7 +51,7 @@ const Footer = () => {
             <Facebook className="w-[18px] h-[18px]" />
           </a>
           <a
-            href="https://x.com/serviciostorogi"
+            href="https://www.facebook.com/serviciostorogil"
             target="_blank"
             rel="noopener noreferrer"
             className="text-neutral-500 hover:text-foreground transition-colors"
