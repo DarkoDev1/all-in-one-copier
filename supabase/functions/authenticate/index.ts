@@ -94,6 +94,29 @@ serve(async (req) => {
         );
       }
 
+      // Ensure admin role exists (prevents redirect loops after login)
+      if (signInData?.user?.id) {
+        const adminUserId = signInData.user.id;
+        const { data: existingAdminRole, error: adminRoleCheckError } = await supabase
+          .from('user_roles')
+          .select('id')
+          .eq('user_id', adminUserId)
+          .eq('role', 'admin')
+          .maybeSingle();
+
+        if (adminRoleCheckError) {
+          console.error('Error checking admin role:', adminRoleCheckError);
+        } else if (!existingAdminRole) {
+          const { error: adminRoleInsertError } = await supabase.from('user_roles').insert({
+            user_id: adminUserId,
+            role: 'admin',
+          });
+          if (adminRoleInsertError) {
+            console.error('Error creating admin role:', adminRoleInsertError);
+          }
+        }
+      }
+
       console.log('Admin authenticated successfully');
       return new Response(
         JSON.stringify({
