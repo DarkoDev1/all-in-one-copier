@@ -23,9 +23,8 @@ const HomePage = ({ onNavigate }: HomePageProps) => {
           </div>
 
           <h1 className="text-5xl md:text-7xl font-medium tracking-tight text-foreground leading-[1.1] mb-8">
-            Confiabilidad, rapidez y <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-red-400 to-orange-400 text-glow">
-              Eficiencia Garantizada.
+              SERVICIOS TORO, GIL &amp; ASOCIADOS, C.A.
             </span>
           </h1>
 
